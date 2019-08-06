@@ -31,9 +31,7 @@ jobs:
           containerResource: fedora-rawhide
           DOTNET_VERSION: 2.2
           options: --cap-add all --security-opt seccomp=unconfined --privileged
-
     container: $[ variables['containerResource'] ]
-
     steps:
     - bash: |
         set -euo pipefail
@@ -50,3 +48,14 @@ jobs:
         sudo dnf install $(grep "^Dependencies: " dotnet-regular-tests/README.md | sed "s/Dependencies: //") -y
         ./run-tests.py ${DOTNET_VERSION} -v
         cat logfile.log
+
+  - job: ShellCheck
+    timeoutInMinutes: 10
+    pool:
+      vmImage: 'Ubuntu-16.04'
+    container: fedora-30
+    steps:
+      - bash: |
+          cat /etc/os-release
+          sudo dnf install ShellCheck findutils -y
+          find -iname '*.sh' ! -path './.git*' -print0 | xargs -0 shellcheck
