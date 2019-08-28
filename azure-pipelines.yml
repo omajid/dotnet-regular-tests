@@ -1,6 +1,9 @@
 
 resources:
   containers:
+  - container: ubi-8
+    image: registry.access.redhat.com/ubi8
+    options: --cap-add all --security-opt seccomp=unconfined --privileged
   - container: fedora-30
     image: fedora:30
     options: --cap-add all --security-opt seccomp=unconfined --privileged
@@ -16,6 +19,10 @@ jobs:
       vmImage: 'Ubuntu-16.04'
     strategy:
       matrix:
+        2.1-ubi-8:
+          containerResource: ubi-8
+          DOTNET_VERSION: 2.1
+          options: --cap-add all --security-opt seccomp=unconfined --privileged
         2.1-fedora-30:
           containerResource: fedora-30
           DOTNET_VERSION: 2.1
@@ -39,9 +46,7 @@ jobs:
         set -euo pipefail
         set -x
         cat /etc/os-release
-        sudo dnf install 'dnf-command(copr)' -y
-        sudo dnf copr enable @dotnet-sig/dotnet -y
-        sudo dnf install git python3 dotnet-sdk-${DOTNET_VERSION} -y
+        sudo dnf install git python3 dotnet-sdk-${DOTNET_VERSION} -y || dnf install git python3 dotnet-sdk-${DOTNET_VERSION} -y
         mkdir dotnet-regular-tests
         mv $(ls * -d | grep -v dotnet-regular-tests) dotnet-regular-tests
         git clone https://github.com/redhat-developer/dotnet-bunny
