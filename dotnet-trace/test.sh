@@ -9,7 +9,8 @@ FILENAME=dotnettrace.nettrace
 SPEEDSCOPENAME=dotnettrace.speedscope.json
 REPORTNAME=dotnettrace.nettrace.etlx
 
-dotnet tool update -g dotnet-trace
+#dotnet tool update -g dotnet-trace
+dotnet tool install --global dotnet-trace --version 9.0.661903
 export PATH="$HOME/.dotnet/tools:$PATH"
 
 dotnet-trace collect -o $FILENAME -- dotnet new console --output $PROJNAME

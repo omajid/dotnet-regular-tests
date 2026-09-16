@@ -87,7 +87,7 @@ set -x
 heading "Installing dotnet-dump"
 
 dotnet tool uninstall -g dotnet-dump || true
-dotnet tool install -g dotnet-dump
+dotnet tool install -g dotnet-dump --version 9.0.661903
 # For preview releases:
 #dotnet tool install -g dotnet-dump --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
 
